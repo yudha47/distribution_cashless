@@ -53,7 +53,7 @@ class ActionClaimController extends Controller{
         $datestart = $request->session()->get('datestart_admissions');
         $dateend = $request->session()->get('dateend_admissions');
       }else{
-        $datestart = Carbon::now()->subDays(2)->format('Y-m-d');
+        $datestart = Carbon::now()->subDays(1)->format('Y-m-d');
         $dateend = Carbon::now()->format('Y-m-d');
       }
     }else if($type_action == 'monitoring'){
@@ -61,7 +61,7 @@ class ActionClaimController extends Controller{
         $datestart = $request->session()->get('datestart_monitoring');
         $dateend = $request->session()->get('dateend_monitoring');
       }else{
-        $datestart = Carbon::now()->subDays(2)->format('Y-m-d');
+        $datestart = Carbon::now()->subDays(1)->format('Y-m-d');
         $dateend = Carbon::now()->format('Y-m-d');
       }
     }else if($type_action == 'discharge'){
@@ -69,7 +69,7 @@ class ActionClaimController extends Controller{
         $datestart = $request->session()->get('datestart_discharge');
         $dateend = $request->session()->get('dateend_discharge');
       }else{
-        $datestart = Carbon::now()->subDays(2)->format('Y-m-d');
+        $datestart = Carbon::now()->subDays(1)->format('Y-m-d');
         $dateend = Carbon::now()->format('Y-m-d');
       }
     }
@@ -330,6 +330,16 @@ class ActionClaimController extends Controller{
                               ]);
   }
 
+  public function check_process(Request $request){
+    $id_action = $request->id_action;
+
+    $check_action = ActionClaim::where('id_action', $id_action)
+                                ->where('pic_analyst', null)
+                                ->get();
+
+    return $check_action->count();
+  }
+
   public function set_to_process(Request $request){
     $pic = $request->session()->get('username');
     $id_action = $request->id_action;
@@ -365,6 +375,15 @@ class ActionClaimController extends Controller{
   public function get_action(Request $request){
     $id = $request->id_action;
     $data = ActionClaim::where("id_action", $id)->first();
+
+    return json_encode(array('data'=>$data));
+  }
+
+  public function get_action_detail(Request $request){
+    $id = $request->id_action;
+    $data = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
+                        ->where("id_action", $id)
+                        ->first();
 
     return json_encode(array('data'=>$data));
   }

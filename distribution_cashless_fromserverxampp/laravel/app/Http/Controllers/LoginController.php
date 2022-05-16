@@ -26,15 +26,18 @@ class LoginController extends Controller
                     ->get();
 
       $fullname='';
+      $username='';
       $level='';
       $id='';
       foreach($user as $u){
         $fullname = $u['full_name'];
+        $username = $u['username'];
         $level = $u['level'];
         $id = $u['id'];
       }
                     
       $request->session()->put('username', $fullname);
+      $request->session()->put('uname', $username);
       $request->session()->put('level', $level);
       $request->session()->put('id', $id);
       

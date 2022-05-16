@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstructionCjController;
+use App\Http\Controllers\ProductivityController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WallboardController;
 
@@ -31,7 +32,7 @@ Route::get('/pagenotfound', [DashboardController::class, 'page_404'])->middlewar
 Route::post('/dashboard/get_notif', [DashboardController::class, 'get_notif_all']);
 Route::post('/dashboard/get_notif_action', [DashboardController::class, 'get_notif_action']);
 
-Route::get('/wallboard/{mode?}', [WallboardController::class, 'index'])->middleware('auth');
+Route::get('/wallboard/{mode?}', [WallboardController::class, 'index']);
 Route::post('/wallboard/filter', [WallboardController::class, 'wallboard_daterange'])->middleware('auth');
 Route::post('/wallboard/reload', [WallboardController::class, 'reload_action'])->middleware('auth');
 Route::post('/wallboard/reload_count', [WallboardController::class, 'reload_count'])->middleware('auth');
@@ -56,8 +57,10 @@ Route::post('/action/refresh_ft', [ActionClaimController::class, 'refresh_ft'])-
 Route::post('/action/refresh_status', [ActionClaimController::class, 'refresh_status'])->middleware('auth');
 Route::post('/action/filter_status', [ActionClaimController::class, 'filter_status'])->middleware('auth');
 Route::post('/action/input', [ActionClaimController::class, 'input_data'])->middleware('auth');
+Route::post('/action/check_process', [ActionClaimController::class, 'check_process'])->middleware('auth');
 Route::post('/action/set_to_process', [ActionClaimController::class, 'set_to_process'])->middleware('auth');
 Route::post('/action/get_action', [ActionClaimController::class, 'get_action'])->middleware('auth');
+Route::post('/action/get_action_detail', [ActionClaimController::class, 'get_action_detail'])->middleware('auth');
 Route::post('/action/update', [ActionClaimController::class, 'update_action'])->middleware('auth');
 Route::post('/action/delete', [ActionClaimController::class, 'delete_action'])->middleware('auth');
 Route::post('/action/search', [ActionClaimController::class, 'search_action'])->middleware('auth');
@@ -74,3 +77,5 @@ Route::post('/instruction-cj/update', [InstructionCjController::class, 'update_a
 Route::post('/instruction-cj/filter_status', [InstructionCjController::class, 'filter_status'])->middleware('auth');
 Route::post('/instruction-cj/delete', [InstructionCjController::class, 'delete_instruction'])->middleware('auth');
 Route::post('/instruction-cj/search', [InstructionCjController::class, 'search_instruction'])->middleware('auth');
+
+Route::get('/productivity', [ProductivityController::class, 'index'])->middleware('auth')->name('productivity');

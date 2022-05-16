@@ -106,6 +106,9 @@
           <li class="nav-item">
             <a class="nav-link pl-3" href="{{url('/users')}}">User Management</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="{{url('/productivity')}}">Time Productivity</a>
+          </li>
           @endif
           <li class="nav-item">
             <a class="nav-link pl-3" href="{{route('logout')}}">Logout</a>

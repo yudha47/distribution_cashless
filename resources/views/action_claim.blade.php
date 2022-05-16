@@ -23,6 +23,14 @@
                           <span class="fe fe-plus"></span> 
                           {{$title}}
                         </button>
+                        <button type="button" class="btn btn-sm btn-secondary mr-2 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span id="btn_status_sess" class="mr-1">Status</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" id="filter_status_sess">
+                          <a id="status_sess_all" class="dropdown-item status-sess" href="#" onclick="refresh_admission('all')"><span class=""></span> Show All</a>
+                          <a id="status_sess_open" class="dropdown-item status-sess" href="#" onclick="refresh_admission('open')"><span class=""></span> Open</a>
+                          <a id="status_sess_close" class="dropdown-item status-sess" href="#" onclick="refresh_admission('close')"><span class=""></span> Close</a>
+                        </div>
                         <div class="form-group d-none d-lg-inline border rounded py-1 px-2 ">
                           <label for="reportrange" class="sr-only">Date Ranges</label>
                           <div id="reportrange" class="">
@@ -41,7 +49,8 @@
                   </div>
                   <div id="form-add" class="col-md-12 ml-auto pt-2 my-2 border" style="display: none">
                     <div>
-                      <div class="form-row">
+                      {{-- <div class="form-row"> --}}
+                      <form id="form_add_action" class="form-row">
                         <div class="form-group col-md-2">
                           <label for="inputCity">Date</label>
                           <div class="input-group">
@@ -53,12 +62,13 @@
                         </div>
                         <div class="form-group col-md-2">
                           <label for="inputCity">Member Name</label>
-                          <input type="text" class="form-control form-control-sm" id="add_membername">
+                          <input type="text" class="form-control form-control-sm" id="add_membername" required>
                           <input type="text" class="form-control form-control-sm invisible" id="add_type" value="{{$title}}">
                         </div>
                         <div class="form-group col-md-2">
                           <label for="inputCity">Client</label>
-                          <select name="" class="form-control form-control-sm select2" id="add_client">
+                          <select name="" class="form-control form-control-sm select2" id="add_client" required>
+                            <option value="0" disabled selected>Please Select</option>
                             @foreach ($client as $c)
                               <option value="{{$c['id_client']}}">{{$c['fullname']}}</option>
                             @endforeach
@@ -66,19 +76,19 @@
                         </div>
                         <div class="form-group col-md-1">
                           <label for="inputCity">RCV Email</label>
-                          <input id="add_receive" class="form-control form-control-sm" type="time" name="time_receive">
+                          <input id="add_receive" class="form-control form-control-sm" type="time" name="time_receive" required>
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputCity">Remarks</label>
-                          <textarea name="" class="form-control form-control-sm" id="add_remarks" rows="1"></textarea>
+                          <textarea name="" class="form-control form-control-sm" id="add_remarks" rows="1" disabled="true"></textarea>
                         </div>
                         <div class="form-group col-md-2">
                           <label for="inputCity">No Claim</label>
-                          <input type="text" class="form-control form-control-sm" id="add_noclaim">
+                          <input type="text" class="form-control form-control-sm" id="add_noclaim" required>
                         </div>
                         <div class="form-group col-md-2">
                           <label for="inputCity">Category</label>
-                          <select name="" class="form-control form-control-sm" id="add_category">
+                          <select name="" class="form-control form-control-sm" id="add_category" required onchange="show_remarks_info()">
                             <option value="0" disabled selected>Please Select</option>
                             @foreach ($category_action as $ca)
                               <option value="{{$ca['category_name']}}">{{$ca['category_name']}}</option>
@@ -93,7 +103,8 @@
                           <label for="inputCity">Status</label>
                           <input type="text" class="form-control form-control-sm" id="add_status" value="Send To Analyst" readonly>
                         </div>
-                      </div>
+                      </form>
+                    {{-- </div> --}}
                       <button type="button" class="btn btn-sm btn-primary mb-3" onclick="input_action()">Save</button>
                       <button type="button" class="btn btn-sm btn-secondary mb-3 ml-1" onclick="hide_formadd()">Cancel</button>
                     </div>
@@ -121,16 +132,16 @@
                 <p class="mb-3 mt-1 "><strong>Input - As CJ</strong><a href="#" id="hide-form-cj" class="float-right text-decoration-none" onclick=""><span class="fe fe-16 fe-x mt-2"></span></a></p>
                 <div class="form-group mb-3">
                   <label for="example-date">Date</label>
-                  <input class="form-control" id="input_date" type="date" name="date" readonly>
+                  <input class="form-control" id="input_date" type="date" name="date" readonly required>
                 </div>
                 <div class="form-group mb-3">
                   <label for="simpleinput">Member Name</label>
-                  <input type="text" id="input_membername" class="form-control" name="member_name">
+                  <input type="text" id="input_membername" class="form-control" name="member_name" required>
                   <input type="text" id="input_idaction" class="form-control d-none" name="id_admission">
                 </div>
                 <div class="form-group mb-3">
                   <label for="example-select">Client</label>
-                  <select id="input_client" class="form-control">
+                  <select id="input_client" class="form-control" required>
                     @foreach ($client as $c)
                       <option value="{{$c['id_client']}}">{{$c['fullname']}}</option>
                     @endforeach
@@ -138,11 +149,11 @@
                 </div>
                 <div class="form-group mb-3">
                   <label for="example-time">Time Distribution</label>
-                  <input id="input_timedistribution" class="form-control" type="time" name="time_distribution" readonly>
+                  <input id="input_timedistribution" class="form-control" type="time" name="time_distribution" readonly required>
                 </div>
                 <div class="form-group mb-3">
                   <label for="example-time">Time RCV Email</label>
-                  <input id="input_timereceive" class="form-control" name="time_receive" type="time" name="time_receive">
+                  <input id="input_timereceive" class="form-control" name="time_receive" type="time" name="time_receive" required>
                 </div>
                 <div class="form-group mb-3">
                   <label for="example-textarea">Remarks</label>
@@ -150,7 +161,7 @@
                 </div>
                 <div class="form-group mb-3">
                   <label for="simpleinput">No Claim</label>
-                  <input type="text" id="input_noclaim" name="no_claim" class="form-control">
+                  <input type="text" id="input_noclaim" name="no_claim" class="form-control" required>
                 </div>
                 <button id="btn-updateaction" type="button" class="btn btn-success btn-block mt-4 btn-updateaction" onclick="update_admission()">Update</button>
               </form>
@@ -162,7 +173,7 @@
                 </div>
                 <div class="form-group mb-3">
                   <label for="example-select">Action Analyst</label>
-                  <select class="form-control" id="input_actionanalyst">
+                  <select class="form-control" id="input_actionanalyst" required>
                     <option value="0" disabled selected>Please Select</option>
                     @foreach ($status as $s)
                       @if($s['status_type'] == "Action Analyst")
@@ -173,8 +184,19 @@
                 </div>
                 <div class="form-group mb-3">
                   <label for="example-time">Action Remarks</label>
-                  <textarea class="form-control" id="input_actionremarks" name="action_remarks" rows="3"></textarea>
-                </div>
+                  <textarea class="form-control" id="input_actionremarks" name="action_remarks" rows="3" required="true"></textarea>
+                  <select name="" id="input_actionremarks_choice" class="form-control d-none" onchange="show_remarks_other()">
+                    <option value="0" disabled selected>Please Select</option>
+                    <option>Review MA</option>
+                    <option>Medis Lanjutan</option>
+                    <option>Penunjang tidak lengkap</option>
+                    <option>Eskalasi Client</option>
+                    <option>Revisi Billing</option>
+                    <option>Rincian Billing</option>
+                    <option>Other</option>
+                  </select>
+                  <textarea class="form-control mt-3 d-none" id="input_actionremarks_other" name="action_remarks_other" rows="3"></textarea>
+                  </div>
                 <div class="custom-control custom-switch mt-3">
                   <input type="checkbox" class="custom-control-input" id="switch_cj">
                   <label class="custom-control-label" for="switch_cj">Send Instruction To Customer Journey</label>
@@ -189,11 +211,11 @@
                 <p class="mb-3 mt-1 "><strong>Input - As Medical Advisor</strong><a href="#" id="hide-form-ma" class="float-right text-decoration-none" onclick=""><span class="fe fe-16 fe-x mt-2"></span></a></p>
                 <div class="form-group mb-3">
                   <label for="simpleinput">PIC MA</label>
-                  <input type="text" class="form-control form-control-sm" id="input_picma" value="{{Session::get('username')}}" readonly>
+                  <input type="text" class="form-control form-control-sm" id="input_picma" value="{{Session::get('username')}}" readonly required>
                 </div>
                 <div class="form-group mb-3">
                   <label for="example-textarea">Remarks MA</label>
-                  <textarea class="form-control" id="input_remakrsma" name="remarks_ma" rows="3"></textarea>
+                  <textarea class="form-control" id="input_remakrsma" name="remarks_ma" rows="3" required></textarea>
                 </div>
                 <button id="btn-updateaction-ma" type="button" class="btn btn-secondary btn-block mt-4 btn-updateaction" onclick="update_admission('update')">Send To Analyst</button>
               </form>
@@ -269,13 +291,14 @@
 </script>
 
 <script>
-  var refresh_admission = function(){
+  var refresh_admission = function(param){
     $("#table-data-action").addClass("d-none");
     $("#table-space").css("overflow", "hidden");
     $(".loader").removeClass("d-none");
 
     var post_data = {
-                    'type_action' : type_action
+                    'type_action' : type_action,
+                    'status_sess' : param
                     };
 
     $.ajax({url: "{{ url('/action/refresh') }}",
@@ -285,6 +308,19 @@
             success : function(response){
               $("#table-space").css("overflow-x", "scroll");
               $('#table-space').html(response);
+
+              if(param != 'notset'){
+                if(param != null){
+                  $("#filter_status_sess a").removeClass("text-primary");
+                  $("#filter_status_sess span").removeClass("fe");
+                  $("#filter_status_sess span").removeClass("fe-check");
+
+                  $("#status_sess_"+param).addClass("text-primary");
+                  $("#status_sess_"+param+" span").addClass("fe");
+                  $("#status_sess_"+param+" span").addClass("fe-check");
+                  $('#btn_status_sess').html("Status Action : "+param);
+                }
+              }
 
               $.ajax({url: "{{ url('/action/refresh_ft') }}",
                 type: "POST",
@@ -323,10 +359,41 @@
   var hide_formadd = function(){  
     $("#form-add").slideUp(400);
   };
+
+  var show_remarks_info = function(){
+    if($("#add_category").val() == 'Others'){
+      $('#add_remarks').attr('disabled', false);
+      $('#add_remarks').attr('required', true);
+    }else{
+      $('#add_remarks').attr('disabled', true);
+      $('#add_remarks').attr('required', false);
+    }
+  }
 </script>
 
 <script type="text/javascript">
   var input_action = function(){ 
+    var form = document.getElementById('form_add_action');
+
+    for(var i=0; i < form.elements.length; i++){
+      if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
+        alert('There are some required fields!');
+        return false;
+      }
+
+      if($("#add_category").val() === null){
+        alert('There are some required fields!');
+        return false;
+      }
+    }
+
+    remarks_info = '';
+    if($("#add_category").val() == 'Others'){
+      remarks_info = $("#add_remarks").val();
+    }else{
+      remarks_info = $("#add_category").val();
+    }
+
     var post_data = {
                     'date_start' : $("#add_date").val(),
                     'type_action' : $("#add_type").val(),
@@ -334,7 +401,7 @@
                     'member_name' : $("#add_membername").val(),
                     'client_id' : $("#add_client").val(),
                     'time_receive' : $("#add_receive").val(),
-                    'remarks_info' : $("#add_remarks").val(),
+                    'remarks_info' : remarks_info,
                     'no_claim' : $("#add_noclaim").val(),
                     'pic_id' : $("#add_pic").val(),
                     'status' : $("#add_status").val()
@@ -392,23 +459,56 @@
                     'type_action' : type_action
                     };
 
-    $.ajax({url: "{{ url('/action/set_to_process') }}",
+    if(mode == 1){
+      $.ajax({url: "{{ url('/action/check_process') }}",
+        type: "POST",
+        data :  post_data,
+        success : function(response1){
+          if(response1 == 0){
+            console.log(response1);
+            alert('Action has been assigned to another PIC, please refresh !!');
+            refresh_admission();
+          }else if(response1 > 0){
+            console.log(response1);
+            $.ajax({url: "{{ url('/action/set_to_process') }}",
+              type: "POST",
+              data :  post_data,
+              success : function(response){
+                $("#table-space").css("overflow-x", "scroll");
+                $('#table-space').html(response);
+
+                $.ajax({url: "{{ url('/action/refresh_status') }}",
+                  type: "POST",
+                  data :  post_data2,
+
+                  success : function(response){
+                    $('#summary-space').html(response);
+                  }
+                });
+              }
+            });
+          }
+        }
+      });
+    }else if(mode == 2){
+      $.ajax({url: "{{ url('/action/set_to_process') }}",
+        type: "POST",
+        data :  post_data,
+        success : function(response){
+          $("#table-space").css("overflow-x", "scroll");
+          $('#table-space').html(response);
+
+          $.ajax({url: "{{ url('/action/refresh_status') }}",
             type: "POST",
-            data :  post_data,
+            data :  post_data2,
+
             success : function(response){
-              $("#table-space").css("overflow-x", "scroll");
-              $('#table-space').html(response);
-
-              $.ajax({url: "{{ url('/action/refresh_status') }}",
-                type: "POST",
-                data :  post_data2,
-
-                success : function(response){
-                  $('#summary-space').html(response);
-                }
-              });
+              $('#summary-space').html(response);
             }
           });
+        }
+      });
+    }
   }
 
   var send_to_cj = function(id_action){
@@ -448,6 +548,9 @@
       $('#hide-form-analyst').attr('onclick', "hide_form("+id_action+", '"+operator+"')");
       $('#table-space').animate( { scrollLeft: '1000' }, 900); 
       $('.btn-updateaction').attr('onclick', "update_action("+id_action+", '"+operator+"', 'process')");
+      if(type_action == 'discharge'){
+        $('#input_actionanalyst').attr('onchange', "show_remarksanalyst()");
+      }
     }else{
       $("#form-input-cj" ).addClass('d-none');
       $("#form-input-analyst" ).addClass('d-none');
@@ -505,7 +608,48 @@
     })
   }; 
 
+  var show_remarksanalyst = function(){
+    if($("#input_actionanalyst").val() == 'Pending Jaminan Awal'){
+      $("#input_actionremarks_choice" ).removeClass('d-none');
+      $("#input_actionremarks" ).addClass('d-none');
+      $('#input_actionremarks').attr('required', false);
+      $('#input_actionremarks_choice').attr('required', true);
+    }else{
+      $("#input_actionremarks_choice" ).addClass('d-none');
+      $("#input_actionremarks" ).removeClass('d-none');
+      $("#input_actionremarks_other" ).addClass('d-none');
+      $('#input_actionremarks').attr('required', true);
+      $('#input_actionremarks_choice').attr('required', false);
+      $('#input_actionremarks_other').attr('required', false);
+    }
+  }
+
+  var show_remarks_other = function(){
+    if($("#input_actionremarks_choice").val() == 'Other'){
+      $("#input_actionremarks_other" ).removeClass('d-none');
+      $('#input_actionremarks_other').attr('required', true);
+    }else{
+      $("#input_actionremarks_other" ).addClass('d-none');
+      $('#input_actionremarks_other').attr('required', false);
+    }
+  }
+
   var update_action = function(id, operator, mode){ 
+    var form = document.getElementById('form-input-'+operator);
+
+    for(var i=0; i < form.elements.length; i++){
+      if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
+        alert('There are some required fields!');
+        return false;
+      }
+    }
+    if(operator == 'analyst'){
+      if($("#input_actionanalyst").val() === null){
+        alert('There are some required fields!');
+        return false;
+      }
+    }
+
     var post_data2 = {
                     'type_action' : type_action
                     };
@@ -527,12 +671,27 @@
       if(mode == 'process'){
         if(operator == 'analyst'){
           status = 'Analyst Process';
+          remarks_ma = '';
+
+          if(type_action == 'discharge'){
+            if($("#input_actionanalyst").val() == 'Pending Jaminan Awal'){
+              if($("#input_actionremarks_choice").val() != 'Other'){
+                remarks_ma = $("#input_actionremarks_choice").val();
+              }else{
+                remarks_ma = $("#input_actionremarks_other").val();
+              }
+            }else{
+                remarks_ma = $("#input_actionremarks").val();
+            }
+          }else{
+            remarks_ma = $("#input_actionremarks").val();
+          }
 
           var post_data = {
                         'id_action' : id,
                         'picanalyst' : $("#input_picanalyst").val(),
                         'actionanalyst' : $("#input_actionanalyst").val(),
-                        'actionremarks' : $("#input_actionremarks").val(),
+                        'actionremarks' : remarks_ma,
                         'status' : status,
                         'mode' : mode,
                         'operator' : operator,
@@ -585,7 +744,6 @@
               $("#input_remarks_to_cj").val('');
               $("#switch_cj").prop("checked", false);
               $("#remarks_to_cj" ).addClass('d-none');
-              // $( "#x" ).prop( "checked", false );
 
               $("#table-space").css("overflow-x", "scroll");
               $('#table-space').html(response);
@@ -597,7 +755,7 @@
               }
 
               var nav = $('#row'+id);
-              $('html').animate( { scrollTop: '500' }, 900); 
+              $('html').animate( { scrollTop: '500' }, 900);
 
               $.ajax({url: "{{ url('/action/refresh_status') }}",
                 type: "POST",
@@ -771,6 +929,22 @@
 @section('addon-page')
 
 <script>
+  var status_sess = "<?php echo Session::get('status_sess') ?>";
+  console.log(status_sess);
+
+  if(status_sess != null){
+    $("#filter_status_sess a").removeClass("text-primary");
+    $("#filter_status_sess span").removeClass("fe");
+    $("#filter_status_sess span").removeClass("fe-check");
+
+    $("#status_sess_"+status_sess).addClass("text-primary");
+    $("#status_sess_"+status_sess+" span").addClass("fe");
+    $("#status_sess_"+status_sess+" span").addClass("fe-check");
+    $('#btn_status_sess').html("Status Action : "+status_sess);
+  }
+</script>
+
+<script>
   function validate() {
     if (document.getElementById('switch_cj').checked) {
         $("#remarks_to_cj" ).removeClass('d-none');
@@ -797,7 +971,7 @@ document.getElementById('switch_cj').addEventListener('change', validate);
   </script>
 @else
   <script>
-    moment_start = moment().subtract(2, 'days');
+    moment_start = moment().subtract(1, 'days');
     moment_end = moment();
   </script>  
 @endif

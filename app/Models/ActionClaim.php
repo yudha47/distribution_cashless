@@ -27,6 +27,7 @@ class ActionClaim extends Model
                           'pic_id',
                           'status',
                           'pic_analyst',
+                          'time_process',
                           'finish_time',
                           'action_analyst',
                           'remarks_analyst',

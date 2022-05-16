@@ -162,6 +162,9 @@
 
   };
 </script>
+<script>
+  // setTimeout(function(){$('#messages').alert('close')}, 6000);
+</script>
 
 <script type="text/javascript">
   var edit_users = function(id){  

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ asset('css/app-light.css') }}" id="lightTheme">
     <link rel="stylesheet" href="{{ asset('css/app-dark.css') }}" id="darkTheme" disabled>
     <link rel="stylesheet" href="{{ asset('css/scroll.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.css') }}">
 
     <style>
       #table-action, #form-action{
@@ -91,7 +92,7 @@
               <h5 class="modal-title text-center" id="defaultModalLabel">Change Password</h5>
             </div>
             <div class="modal-body"> 
-              <form id="form-input-cj" action="{{url('users/change_password')}}" class="" method="post">
+              <form id="form-change-password" action="{{url('users/change_password')}}" class="" method="post">
                 @csrf
                 <div class="form-group mb-3">
                   <label for="simpleinput">New Password</label>
@@ -121,6 +122,8 @@
     <script src="{{ asset('js/config.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
     <script src="{{ asset('js/jquery.timepicker.js') }}"></script>
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
 
     <script>
       var sess_username = '<?php echo Session::get('username') ?>';
@@ -170,7 +173,7 @@
               });
       }
 
-      var myInterval = setInterval(reload_notif, 1000);
+      var myInterval = setInterval(reload_notif, 3000);
 
       function get_notif(operator){
         var post_data = {

@@ -35,7 +35,7 @@ class InstructionCjController extends Controller{
       $datestart = $request->session()->get('datestart_cj');
       $dateend = $request->session()->get('dateend_cj');
     }else{
-      $datestart = Carbon::now()->subDays(2)->format('Y-m-d');
+      $datestart = Carbon::now()->subDays(1)->format('Y-m-d');
       $dateend = Carbon::now()->format('Y-m-d');
     }
 

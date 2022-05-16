@@ -102,9 +102,12 @@
           <li class="nav-item">
             <a class="nav-link pl-3" href="3" data-toggle="modal" data-target="#changepassword">Change Password</a>
           </li>
-          @if (Session::get('level') == 0)
+          @if (Session::get('level') == 0 || Session::get('username') == 'nesa.ginting')
           <li class="nav-item">
             <a class="nav-link pl-3" href="{{url('/users')}}">User Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pl-3" href="{{url('/productivity')}}">Time Productivity</a>
           </li>
           @endif
           <li class="nav-item">

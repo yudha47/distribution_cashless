@@ -41,11 +41,12 @@
                   </div>
                   <div id="form-add" class="col-md-12 ml-auto pt-2 my-2 border" style="display: none">
                     <div>
-                      <div class="form-row">
+                      {{-- <div class="form-row"> --}}
+                      <form id="form_add_instruction" class="form-row">
                         <div class="form-group col-md-2">
                           <label for="inputCity">Date</label>
                           <div class="input-group">
-                            <input type="text" class="form-control drgpicker form-control-sm" id="add_date" value="" aria-describedby="button-addon2" autocomplete="off">
+                            <input type="text" class="form-control drgpicker form-control-sm" id="add_date" value="" aria-describedby="button-addon2" autocomplete="off" required>
                             <div class="input-group-append">
                               <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16"></span></div>
                             </div>
@@ -53,11 +54,12 @@
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputCity">Member Name</label>
-                          <input type="text" class="form-control form-control-sm" id="add_membername">
+                          <input type="text" class="form-control form-control-sm" id="add_membername" required>
                         </div>
                         <div class="form-group col-md-2">
                           <label for="inputCity">Client</label>
-                          <select name="" class="form-control form-control-sm select2" id="add_client">
+                          <select name="" class="form-control form-control-sm select2" id="add_client" required>
+                            <option value="0" disabled selected>Please Select</option>
                             @foreach ($client as $c)
                               <option value="{{$c['id_client']}}">{{$c['fullname']}}</option>
                             @endforeach
@@ -69,11 +71,11 @@
                         </div>
                         <div class="form-group col-md-2">
                           <label for="inputCity">No Claim</label>
-                          <input type="text" class="form-control form-control-sm" id="add_noclaim">
+                          <input type="text" class="form-control form-control-sm" id="add_noclaim" required>
                         </div>
                         <div class="form-group col-md-2">
                           <label for="inputCity">Category</label>
-                          <select name="" class="form-control form-control-sm" id="add_category">
+                          <select name="" class="form-control form-control-sm" id="add_category" required>
                             <option value="0" disabled selected>Please Select</option>
                             @foreach ($category_action as $ca)
                               <option value="{{$ca['category_name']}}">{{$ca['category_name']}}</option>
@@ -88,7 +90,8 @@
                           <label for="inputCity">Status</label>
                           <input type="text" class="form-control form-control-sm" id="add_status" value="Send To CJ" readonly>
                         </div>
-                      </div>
+                      {{-- </div> --}}
+                      </form>
                       <button type="button" class="btn btn-sm btn-primary mb-3" onclick="input_action()">Save</button>
                       <button type="button" class="btn btn-sm btn-secondary mb-3 ml-1" onclick="hide_formadd()">Cancel</button>
                     </div>
@@ -277,7 +280,23 @@
 </script>
 
 <script type="text/javascript">
-  var input_action = function(){ 
+  var input_action = function(){  
+    var form = document.getElementById('form_add_instruction');
+
+    for(var i=0; i < form.elements.length; i++){
+      if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
+        alert('There are some required fields!');
+        return false;
+      }
+
+      if($("#add_category").val() === null){
+        alert('There are some required fields!');
+        return false;
+      }
+    }
+
+    // alert('oke');
+
     var post_data = {
                     'date_start' : $("#add_date").val(),
                     'category' : $("#add_category").val(),
@@ -499,7 +518,7 @@
                     };
 
     $.ajax({type: "POST",
-            url: "/instruction-cj/delete/",
+            url: "{{ url('/instruction-cj/delete/') }}",
             data :  post_data,
             
             success : function(response){
@@ -622,7 +641,7 @@
   </script>
 @else
   <script>
-    moment_start = moment().subtract(2, 'days');;
+    moment_start = moment().subtract(1, 'days');;
     moment_end =moment();
   </script>  
 @endif

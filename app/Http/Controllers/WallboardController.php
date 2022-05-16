@@ -21,6 +21,7 @@ class WallboardController extends Controller
     $admission = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
                               ->select('*')
                               ->where('type_action', 'admissions')
+                              ->where('status', '!=', 'RCV By Analyst')
                               ->whereBetween('date', [$datestart, $dateend])
                               ->orderBy('member_name', 'ASC')
                               ->get();
@@ -28,6 +29,7 @@ class WallboardController extends Controller
     $monitoring = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
                               ->select('*')
                               ->where('type_action', 'monitoring')
+                              ->where('status', '!=', 'RCV By Analyst')
                               ->whereBetween('date', [$datestart, $dateend])
                               ->orderBy('member_name', 'ASC')
                               ->get();
@@ -35,6 +37,7 @@ class WallboardController extends Controller
     $discharge = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
                               ->select('*')
                               ->where('type_action', 'discharge')
+                              ->where('status', '!=', 'RCV By Analyst')
                               ->whereBetween('date', [$datestart, $dateend])
                               ->orderBy('member_name', 'ASC')
                               ->get();
@@ -74,46 +77,28 @@ class WallboardController extends Controller
     $datestart = $request->date_start;
     $dateend = $request->date_end;
     
-    // $admission = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
-    //                           ->select('*')
-    //                           ->where('type_action', 'admissions')
-    //                           ->whereBetween('date', [$datestart, $dateend])
-    //                           ->orderBy('member_name', 'ASC')
-    //                           ->get();
-
-    // $monitoring = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
-    //                           ->select('*')
-    //                           ->where('type_action', 'monitoring')
-    //                           ->whereBetween('date', [$datestart, $dateend])
-    //                           ->orderBy('member_name', 'ASC')
-    //                           ->get();
-
-    // $discharge = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
-    //                           ->select('*')
-    //                           ->where('type_action', 'discharge')
-    //                           ->whereBetween('date', [$datestart, $dateend])
-    //                           ->orderBy('member_name', 'ASC')
-    //                           ->get();
-    
     $admission = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
                               ->select('*')
                               ->where('type_action', 'admissions')
-                              ->whereBetween('date', [$datestart, $dateend])
-                              ->orderBy('member_name', 'ASC')
+                              ->where('status', '!=', 'RCV By Analyst')
+                              // ->whereBetween('date', [$datestart, $dateend])
+                              ->orderBy('time_distribution', 'ASC')
                               ->get();
 
     $monitoring = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
                               ->select('*')
                               ->where('type_action', 'monitoring')
-                              ->whereBetween('date', [$datestart, $dateend])
-                              ->orderBy('member_name', 'ASC')
+                              ->where('status', '!=', 'RCV By Analyst')
+                              // ->whereBetween('date', [$datestart, $dateend])
+                              ->orderBy('time_distribution', 'ASC')
                               ->get();
 
     $discharge = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
                               ->select('*')
                               ->where('type_action', 'discharge')
-                              ->whereBetween('date', [$datestart, $dateend])
-                              ->orderBy('member_name', 'ASC')
+                              ->where('status', '!=', 'RCV By Analyst')
+                              // ->whereBetween('date', [$datestart, $dateend])
+                              ->orderBy('time_distribution', 'ASC')
                               ->get();
 
     $admission_all = $admission->count();
@@ -152,35 +137,8 @@ class WallboardController extends Controller
                           ->select('member_name', 'fullname', 'time_distribution', 'status')
                           ->where('type_action', $type_action)
                           ->where('status', '!=', 'RCV By Analyst')
-                          // ->whereBetween('date', [$datestart, $dateend])
-                          ->orderBy('member_name', 'ASC')
+                          ->orderBy('time_distribution', 'ASC')
                           ->get();
-
-    // $sql = "SELECT * FROM `action_claim` WHERE `status` != CASE WHEN date < curdate() THEN 'RCV By Analyst' WHEN date = curdate() THEN 'all' END LIMIT 5";
-    
-    // $action3 = ActionClaim::Join('clients', 'clients.id_client', '=', 'action_claim.client_id')
-                          // ->select('member_name', 'fullname', 'time_distribution', 'status', 
-                          // DB::raw("WHERE `status` != CASE WHEN date < curdate() THEN 'RCV By Analyst' WHEN date = curdate() THEN 'all'")
-                          // )
-                          // // ->where('type_action', $type_action)
-                          // // ->whereBetween('date', [$datestart, $dateend])
-                          // // ->orderBy('member_name', 'ASC')
-                          // ->get();
-
-    // $action = DB::select('SELECT * from action_claim');
-    // dd($action);
-    // exit();
-
-    // $query = DB::table('action_claim')
-    // ->when('date', function ($q){
-    //     return $q->where('status', 1);
-    // })
-    // ->when($year, function($q) use ($year) {
-    //     return $q->where('year', '>', $year);
-    // })
-    // ->get();
-
-    // $action2 = DB::select("SELECT * FROM action_claim WHERE `status` != CASE WHEN date < curdate() THEN 'RCV By Analyst' WHEN date = curdate() THEN 'all' END LIMIT 5");
 
     return view('data_wallboard_action', ['action' => $action]);
   }
@@ -194,7 +152,6 @@ class WallboardController extends Controller
                           ->select('member_name', 'fullname', 'time_distribution', 'status')
                           ->where('type_action', $type_action)
                           ->where('status', '!=', 'RCV By Analyst')
-                          // ->whereBetween('date', [$datestart, $dateend])
                           ->orderBy('member_name', 'ASC')
                           ->get();
 

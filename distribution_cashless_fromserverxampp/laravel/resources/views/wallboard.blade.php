@@ -9,158 +9,8 @@
         <div id="table-admission" class="col-md-12">
           <div class="">
             <h2 class="h4 text-center">{{$title}}</h2>
-            <!-- <form class="form-inline justify-content-center">
-              <div class="form-group d-none d-lg-inline rounded py-1 px-2 ">
-                <label for="reportrange" class="sr-only">Date Ranges</label>
-                <div id="reportrange" class="">
-                  <span id="daterange-wallboard" class="small btn btn-outline-primary btn-sm">February 9, 2022 - February 9, 2022</span>
-                  <span id="datestart-wallboard" class="small d-none"></span>
-                  <span id="dateend-wallboard" class="small d-none"></span>
-                </div>
-              </div>
-            </form> -->
           </div>
           <div id="wallboard-space" class="row mt-4">
-            {{-- <div class="col-md-4">
-              <div class="card shadow mb-4">
-                <div class="card-header text-center">
-                  <strong>Admission</strong>
-                </div>
-                <div class="card-body px-4">
-                  <div class="row border-bottom">
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted">All Case</p>
-                      <span class="h3">{{$admission_all}}</span><br />
-                    </div>
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted"><span class="dot dot-lg bg-danger mr-2"></span>Send To Analyst</p>
-                      <span class="h3">{{$admission_send2analyst}}</span><br />
-                    </div>
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted"><span class="dot dot-lg bg-success mr-2"></span>RCV By Analyst</p>
-                      <span class="h3">{{$admission_send2ma}}</span><br />
-                    </div>
-                  </div>
-                  <table class="table table-borderless mt-3 mb-1 mx-n1 table-sm text-center">
-                    <thead>
-                      <tr>
-                        <th class="text-left">Member Name</th>
-                        <th class="">Time Distribution</th>
-                        <th class="w-10">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach ($admission as $a)
-                      <tr>
-                        <td class="text-left">{{$a['member_name']}}</td>
-                        <td class="">{{date_format(date_create($a['time_distribution']), "H:i")}}</td>
-                        <td class="">
-                          @if ($a['status'] == "Send To Analyst")
-                            <span class="dot dot-lg bg-danger mr-2"></span>
-                          @elseif ($a['status'] == "Analyst Process")
-                            <span class="dot dot-lg bg-warning mr-2"></span>
-                          @else
-                            <span class="dot dot-lg bg-success mr-2"></span>
-                          @endif
-                        </td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div> <!-- .card-body -->
-              </div> <!-- .card -->
-            </div> <!-- .col -->
-            <div class="col-md-4">
-              <div class="card shadow mb-4">
-                <div class="card-header text-center">
-                  <strong>Monitoring</strong>
-                </div>
-                <div class="card-body px-4">
-                  <div class="row border-bottom">
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted">All Case</p>
-                      <span class="h3">{{$monitoring_all}}</span><br />
-                    </div>
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted"><span class="dot dot-lg bg-danger mr-2"></span>Send To Analyst</p>
-                      <span class="h3">{{$monitoring_send2analyst}}</span><br />
-                    </div>
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted"><span class="dot dot-lg bg-success mr-2"></span>RCV By Analyst</p>
-                      <span class="h3">{{$monitoring_rcvbyanalyst}}</span><br />
-                    </div>
-                  </div>
-                  <table class="table table-borderless mt-3 mb-1 mx-n1 table-sm text-center">
-                    <thead>
-                      <tr>
-                        <th class="text-left">Member Name</th>
-                        <th class="">Time Distribution</th>
-                        <th class="w-10">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach ($monitoring as $m)
-                      <tr>
-                        <td class="text-left">{{$m['member_name']}}</td>
-                        <td class="">{{date_format(date_create($m['time_distribution']), "H:i")}}</td>
-                        <td class="">
-                          @if ($m['status'] == "Send To Analyst")
-                            <span class="dot dot-lg bg-danger mr-2"></span>
-                          @elseif ($m['status'] == "Analyst Process")
-                            <span class="dot dot-lg bg-warning mr-2"></span>
-                          @else
-                          <span class="dot dot-lg bg-success mr-2"></span>
-                          @endif
-                        </td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div> <!-- .card-body -->
-              </div> <!-- .card -->
-            </div> <!-- .col -->
-            <div class="col-md-4">
-              <div class="card shadow mb-4">
-                <div class="card-header text-center">
-                  <strong>Discharge</strong>
-                </div>
-                <div class="card-body px-4">
-                  <div class="row border-bottom">
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted">All Case</p>
-                      <span class="h3">{{$discharge_all}}</span><br />
-                    </div>
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted"><span class="dot dot-lg bg-danger mr-2"></span>Send To Analyst</p>
-                      <span class="h3">{{$discharge_send2analyst}}</span><br />
-                    </div>
-                    <div class="col-4 text-center mb-3">
-                      <p class="mb-1 small text-muted"><span class="dot dot-lg bg-success mr-2"></span>RCV By Analyst</p>
-                      <span class="h3">{{$discharge_rcvbyanalyst}}</span><br />
-                    </div>
-                  </div>
-                  <table class="table table-borderless mt-3 mb-1 mx-n1 table-sm text-center">
-                    <thead>
-                      @foreach ($discharge as $d)
-                      <tr>
-                        <td class="text-left">{{$d['member_name']}}</td>
-                        <td class="">{{date_format(date_create($d['time_distribution']), "H:i")}}</td>
-                        <td class="">
-                          @if ($d['status'] == "Send To Analyst")
-                            <span class="dot dot-lg bg-danger mr-2"></span>
-                            @elseif ($d['status'] == "Analyst Process")
-                              <span class="dot dot-lg bg-warning mr-2"></span>
-                          @else
-                          <span class="dot dot-lg bg-success mr-2"></span>
-                          @endif
-                        </td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div> <!-- .card-body -->
-              </div> <!-- .card -->
-            </div> <!-- .col --> --}}
           </div> <!-- .row -->
         </div>
       </div> <!-- end section -->
@@ -253,14 +103,14 @@ var reload_action = function(type_action){
                           reload_action("admissions");
                           setTimeout(function() {
                                                 reload_action("monitoring");
-                                              }, 2500);
+                                              }, 3500);
                                               setTimeout(function() {
                                                                     reload_action("discharge");
-                                                                  }, 2500);
+                                                                  }, 3500);
                                                                   setTimeout(function() {
                                                                                       interval_reload_action();
-                                                                                      }, 2500);
-                        }, 2500);
+                                                                                      }, 3500);
+                        }, 3500);
   }
 </script>
 @if ($mode == null)
@@ -281,14 +131,14 @@ var reload_action = function(type_action){
                         reload_action("admissions");
                         setTimeout(function() {
                                               reload_action("monitoring");
-                                            }, 2000);
+                                            }, 3000);
                                             setTimeout(function() {
                                                                   reload_action("discharge");
-                                                                }, 2000);
+                                                                }, 3000);
                                                                   setTimeout(function() {
                                                                                       interval_reload_action();
-                                                                                      }, 2000);
-                      }, 2000);
+                                                                                      }, 3000);
+                      }, 3000);
 </script>
 @endif
 @endsection

@@ -103,7 +103,7 @@ class DashboardController extends Controller{
 
   public function get_notif_all(Request $request){
     $result_analyst = ActionClaim::select('id_action')->where('status', 'Send To Analyst')->count();
-    $result_ma = ActionClaim::select('id_action')->where('action_analyst', 'Send To MA')->where('pic_ma', null)->count();
+    $result_ma = ActionClaim::select('id_action')->where('action_analyst', 'Send To MA')->where('pic_ma', null)->where('status', '!=', 'RCV By Analyst')->count();
     $result_cj = InstructionCj::select('id_instruction')->where('status', 'Send To CJ')->count();
 
     $result = array($result_analyst, $result_ma, $result_cj);
@@ -125,7 +125,7 @@ class DashboardController extends Controller{
     }else if($operator == 'ma'){
       $status = 'Send To MA';
 
-      $result = ActionClaim::select('type_action')->where('action_analyst', $status)->where('pic_ma', null)->get();
+      $result = ActionClaim::select('type_action')->where('action_analyst', $status)->where('pic_ma', null)->where('status', '!=', 'RCV By Analyst')->get();
   
       $admissions = $result->where('type_action', 'admissions')->count();
       $monitoring = $result->where('type_action', 'monitoring')->count();

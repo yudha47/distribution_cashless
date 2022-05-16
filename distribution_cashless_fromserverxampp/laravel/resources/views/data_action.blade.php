@@ -40,7 +40,7 @@
       <td class="text-center">{{$no}}</td>
       <td>
         {{$action['date']}}</br>
-        {{$action['category']}}
+        {{-- {{$action['category']}} --}}
       </td>
       <td style="white-space: normal;">
         {{$action['member_name']}}</br>

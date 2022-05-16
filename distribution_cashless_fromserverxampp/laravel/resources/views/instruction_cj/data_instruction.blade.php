@@ -114,7 +114,7 @@
         </div>
       </td>
       <td class="text-center">{{$instruction['pic_cj']}}</td>
-      <td>
+      <td style="white-space: normal;">
         @if ($instruction['time_action_cj'] == '')
           -
         @else

@@ -7,7 +7,7 @@
       <div class="row align-items-center mb-2">
         <div class="col">
           <h2 class="h5 page-title d-inline">Welcome!</h2>
-          <p class="text-muted">Daily Distribution CJ - Cashless</p>
+          <p class="text-muted">Daily Distribution Cashless</p>
         </div>
         <div class="col-auto">
           <form class="form-inline">

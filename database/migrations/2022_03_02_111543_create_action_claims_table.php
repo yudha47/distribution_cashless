@@ -27,6 +27,7 @@ class CreateActionClaimsTable extends Migration
         $table->string('pic_id', 100)->nullable();
         $table->string('status', 100)->nullable();
         $table->string('pic_analyst', 100)->nullable();
+        $table->datetime('time_process')->nullable();
         $table->datetime('finish_time')->nullable();
         $table->string('action_analyst', 100)->nullable();
         $table->string('remarks_analyst', 2000)->nullable();
